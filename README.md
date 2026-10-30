@@ -1,3 +1,65 @@
+# Redesigned Threaded Mode
+
+A concept for Telegram iOS by [@wayanyway](https://t.me/wayanyway), built on Telegram-iOS 13.1.1.
+
+![Preview](docs/threaded-mode/preview.png)
+
+▶️ [Watch the demo](docs/threaded-mode/demo.mp4)
+
+## What it does
+
+Each topic of a bot with Threaded Mode becomes its own row in the chat list, right under the bot.
+You see every conversation with the bot at a glance and open it in one tap, without going into the bot first.
+
+Tap the arrow on the bot's avatar to choose how it looks, the same way as for communities:
+
+- **Topics Inside the Bot.** The classic way: one row for the bot, the topic switcher inside the chat.
+- **Show as One Chat.** One row with a stack, like a community. Tap it to see all topics.
+- **In Chat List / Other Topics.** Long press a topic on that screen to hide it from the list or bring it back.
+  New topics show up in the list by default.
+
+These settings are kept per account.
+
+It follows the bot's settings in @BotFather:
+
+- **Threaded Mode off.** A regular chat with the bot, nothing changes.
+- **Threaded Mode on.** Every new message starts its own topic, and it appears under the bot in the list.
+  A **New Chat** button shows up on the bot's row: name the topic, pick an icon, and you're in.
+- **"Disallow users to create new threads" on.** New Chat disappears and your messages stay in the main chat.
+  Topics you already have stay under the bot, so you can keep talking both in the main chat and inside each topic.
+
+Works in every chat list: All Chats, folders, archive.
+
+## Try it
+
+1. Build the app (see the guide below).
+2. In @BotFather → your bot → Bot Settings, turn on Threaded Mode.
+3. Open the chat list: the bot's topics are under it, New Chat is on its row.
+4. Tap the arrow on the bot's avatar to switch how its topics look.
+
+## Where the code is
+
+| File | What changed |
+|---|---|
+| `ChatListUI/Sources/Node/ChatListNodeLocation.swift` | puts each bot's topics under the bot in the list |
+| `ChatListUI/Sources/Node/ChatListItem.swift` | the session row: indent, topic icon, New Chat button; the arrow and the stack on the bot's avatar |
+| `ChatListUI/Sources/Node/ChatListNodeEntries.swift` | the bot's row is redrawn when Show as One Chat changes |
+| `ChatListUI/Sources/ChatListController.swift` | New Chat opens the native new-topic window |
+| `TelegramUI/Sources/ChatInterfaceTitlePanelNodes.swift` | no topic switcher in a Threaded Mode bot's chat, unless Topics Inside the Bot is on |
+| `TelegramUI/Components/ThreadedBotSessions` | which bots have sessions, their settings for the account, re-reading their topics |
+| `TelegramUIPreferences/Sources/ThreadedBotSettings.swift` | per-bot settings kept in the account: topics inside, one chat, topics taken off the list |
+| `TelegramUI/Components/Communities/CommunityViewScreen/Sources/CommunityViewScreen.swift` | the community screen shows a bot's topics and its settings |
+| `TelegramCore/Sources/ForumChannels.swift` | re-reads a bot's topics: the server knows when a topic was read on another device, but doesn't tell this one |
+
+All changes: [`main...threaded-redesign`](../../compare/main...threaded-redesign)
+
+## Not done yet
+
+- Swipe actions on a session row.
+- Search on the bot's screen.
+
+---
+
 # Telegram iOS Source Code Compilation Guide
 
 We welcome all developers to use our API and source code to create applications on our platform.
